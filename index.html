@@ -4,8 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hovr - Revolutionary Drone Delivery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
     <style>
+        :root {
+            --primary-blue: #007AFF;
+            --dark-blue: #1D3557;
+            --light-gray: #F8F9FA;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: var(--dark-blue);
+        }
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -31,19 +41,36 @@
             0% { transform: translate(0, 0); }
             100% { transform: translate(-100%, 0); }
         }
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: var(--primary-blue);
+            transform: scaleX(0);
+            transition: transform 0.3s ease-in-out;
+        }
+        .nav-link:hover::after {
+            transform: scaleX(1);
+        }
     </style>
 </head>
-<body class="font-sans text-gray-800">
+<body class="bg-white">
     <header class="fixed w-full bg-white shadow-md z-50">
         <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
             <a href="#" class="text-3xl font-bold">
                 <img src="/api/placeholder/120/40" alt="Hovr Logo" class="h-8">
             </a>
-            <div>
-                <a href="#aircraft" class="text-gray-800 hover:text-blue-600 px-3 py-2 uppercase text-sm">Aircraft</a>
-                <a href="#certification" class="text-gray-800 hover:text-blue-600 px-3 py-2 uppercase text-sm">Certification</a>
-                <a href="#hovr-world" class="text-gray-800 hover:text-blue-600 px-3 py-2 uppercase text-sm">Hovr World</a>
-                <a href="#company" class="text-gray-800 hover:text-blue-600 px-3 py-2 uppercase text-sm">Company</a>
+            <div class="space-x-6">
+                <a href="#aircraft" class="nav-link text-gray-800 hover:text-primary-blue uppercase text-sm font-medium">Aircraft</a>
+                <a href="#certification" class="nav-link text-gray-800 hover:text-primary-blue uppercase text-sm font-medium">Certification</a>
+                <a href="#hovr-world" class="nav-link text-gray-800 hover:text-primary-blue uppercase text-sm font-medium">Hovr World</a>
+                <a href="#company" class="nav-link text-gray-800 hover:text-primary-blue uppercase text-sm font-medium">Company</a>
             </div>
         </nav>
     </header>
@@ -52,8 +79,8 @@
         <section class="hero-section flex items-center relative overflow-hidden">
             <img src="/api/placeholder/1920/1080" alt="Hovr Drone" class="absolute inset-0 w-full h-full object-cover">
             <div class="relative z-10 container mx-auto px-6 text-white">
-                <h1 class="text-5xl font-bold mb-4 fade-in">UNLOCK THE SKIES™</h1>
-                <p class="text-3xl mb-8 fade-in">Flying drones are delivering soon</p>
+                <h2 class="text-2xl font-medium mb-2 fade-in">UNLOCK THE SKIES™</h2>
+                <h1 class="text-6xl font-bold mb-4 fade-in">Flying cars are landing soon</h1>
             </div>
         </section>
 
@@ -67,29 +94,30 @@
             </div>
         </section>
 
-        <section id="aircraft" class="py-20 bg-gray-100">
+        <section id="aircraft" class="py-20 bg-white">
             <div class="container mx-auto px-6">
-                <h2 class="text-2xl font-semibold mb-4 text-blue-600">SAFE, SUSTAINABLE, LOW NOISE</h2>
-                <h3 class="text-5xl font-bold mb-6">Electric drones flying deliveries in a city near you</h3>
-                <p class="text-xl mb-8 max-w-3xl">We are currently working through certification with the FAA and other global aviation authorities to ensure our drones can safely integrate into the airspace so we can begin delivering packages in the world's largest cities.</p>
+                <h2 class="text-xl font-medium mb-4 text-primary-blue">SAFE, SUSTAINABLE, LOW NOISE</h2>
+                <h3 class="text-5xl font-bold mb-6 text-dark-blue">Electric drones flying deliveries in a city near you</h3>
+                <p class="text-xl mb-8 max-w-3xl text-gray-600">We are currently working through certification with the FAA and other global aviation authorities to ensure our drones can safely integrate into the airspace so we can begin delivering packages in the world's largest cities.</p>
                 <img src="/api/placeholder/1200/600" alt="Hovr Drone Concept" class="w-full rounded-lg shadow-lg">
             </div>
         </section>
 
-        <section id="certification" class="py-20">
+        <section id="certification" class="py-20 bg-light-gray">
             <div class="container mx-auto px-6">
-                <h2 class="text-2xl font-semibold mb-4 text-blue-600">SAVE TIME TO SPEND TIME</h2>
-                <h3 class="text-5xl font-bold mb-6">Targeting 5-15 mile routes that take over an hour by road</h3>
-                <p class="text-xl mb-8 max-w-3xl">Why wait in traffic when your package can fly above it? Drone deliveries are poised to revolutionize the way goods move around cities, designed to cut 1+ hour delivery times down to mere minutes.</p>
+                <h2 class="text-xl font-medium mb-4 text-primary-blue">SAVE TIME TO SPEND TIME</h2>
+                <h3 class="text-5xl font-bold mb-6 text-dark-blue">Targeting 20-50 mile routes that take over an hour in traffic</h3>
+                <p class="text-xl mb-8 max-w-3xl text-gray-600">Why sit in traffic when you can fly above it? Air taxis are poised to revolutionize the way people move around cities, designed to cut 1+ hour commutes down to mere minutes.</p>
                 <img src="/api/placeholder/1200/600" alt="Hovr Drone Route Map" class="w-full rounded-lg shadow-lg">
             </div>
         </section>
 
-        <section id="hovr-world" class="py-20 bg-gray-100">
+        <section id="hovr-world" class="py-20 bg-white">
             <div class="container mx-auto px-6">
-                <h2 class="text-2xl font-semibold mb-4 text-blue-600">REALISTIC INNOVATION</h2>
-                <h3 class="text-5xl font-bold mb-6">All electric, autonomous drone technology</h3>
-                <p class="text-xl mb-8 max-w-3xl">Hovr's versatility is designed around opening up a new era of delivery at scale, with the goal of providing customers unprecedented connectivity to goods and services across the most congested cities in the world.</p>
+                <h2 class="text-xl font-medium mb-4 text-primary-blue">REALISTIC INNOVATION</h2>
+                <h3 class="text-5xl font-bold mb-6 text-dark-blue">Take off like a helicopter, fly like a plane</h3>
+                <p class="text-xl mb-4 text-gray-600">All electric, tilt-propeller technology</p>
+                <p class="text-xl mb-8 max-w-3xl text-gray-600">Midnight's versatility is designed around opening up a new era of air mobility at scale, with the goal of providing passengers unprecedented connectivity to the people and places across the most congested cities in the world.</p>
                 <div class="grid grid-cols-2 gap-8">
                     <img src="/api/placeholder/600/400" alt="Hovr Drone Close-up" class="w-full rounded-lg shadow-lg">
                     <img src="/api/placeholder/600/400" alt="Hovr Drone in Flight" class="w-full rounded-lg shadow-lg">
@@ -97,53 +125,53 @@
             </div>
         </section>
 
-        <section id="company" class="py-20">
+        <section id="company" class="py-20 bg-light-gray">
             <div class="container mx-auto px-6">
-                <h2 class="text-2xl font-semibold mb-4 text-blue-600">STAY IN TOUCH</h2>
-                <h3 class="text-5xl font-bold mb-6">Never miss an update from Hovr</h3>
+                <h2 class="text-xl font-medium mb-4 text-primary-blue">STAY IN TOUCH</h2>
+                <h3 class="text-5xl font-bold mb-6 text-dark-blue">Never miss an update from Hovr</h3>
                 <form class="max-w-lg mx-auto">
                     <div class="flex">
-                        <input type="email" placeholder="you@example.com" class="flex-grow p-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-600">
-                        <button type="submit" class="bg-blue-600 text-white py-2 px-6 rounded-r-md hover:bg-blue-700 transition duration-300 uppercase">Submit</button>
+                        <input type="email" placeholder="you@example.com" class="flex-grow p-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-primary-blue">
+                        <button type="submit" class="bg-primary-blue text-white py-2 px-6 rounded-r-md hover:bg-blue-700 transition duration-300 uppercase font-medium">Submit</button>
                     </div>
                 </form>
-                <p class="mt-4 text-center">CONTACT US AT <a href="mailto:INFO@HOVR.COM" class="underline">INFO@HOVR.COM</a></p>
+                <p class="mt-4 text-center text-gray-600">CONTACT US AT <a href="mailto:INFO@HOVR.COM" class="underline text-primary-blue">INFO@HOVR.COM</a></p>
             </div>
         </section>
     </main>
 
-    <footer class="bg-gray-800 text-white py-12">
+    <footer class="bg-gray-900 text-white py-12">
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-4 gap-8">
                 <div>
                     <h4 class="font-bold mb-4">Hovr Home</h4>
                     <ul class="space-y-2">
-                        <li><a href="#" class="hover:underline">Aircraft</a></li>
-                        <li><a href="#" class="hover:underline">Certification</a></li>
-                        <li><a href="#" class="hover:underline">Hovr World</a></li>
+                        <li><a href="#" class="hover:text-primary-blue transition duration-300">Aircraft</a></li>
+                        <li><a href="#" class="hover:text-primary-blue transition duration-300">Certification</a></li>
+                        <li><a href="#" class="hover:text-primary-blue transition duration-300">Hovr World</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="font-bold mb-4">Company</h4>
                     <ul class="space-y-2">
-                        <li><a href="#" class="hover:underline">Investors</a></li>
-                        <li><a href="#" class="hover:underline">Careers</a></li>
-                        <li><a href="#" class="hover:underline">Contact Us</a></li>
+                        <li><a href="#" class="hover:text-primary-blue transition duration-300">Investors</a></li>
+                        <li><a href="#" class="hover:text-primary-blue transition duration-300">Careers</a></li>
+                        <li><a href="#" class="hover:text-primary-blue transition duration-300">Contact Us</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="font-bold mb-4">News</h4>
                     <ul class="space-y-2">
-                        <li><a href="#" class="hover:underline">Media Kit</a></li>
-                        <li><a href="#" class="hover:underline">Media Inquiries</a></li>
+                        <li><a href="#" class="hover:text-primary-blue transition duration-300">Media Kit</a></li>
+                        <li><a href="#" class="hover:text-primary-blue transition duration-300">Media Inquiries</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="font-bold mb-4">Legal</h4>
                     <ul class="space-y-2">
-                        <li><a href="#" class="hover:underline">Privacy Policy</a></li>
-                        <li><a href="#" class="hover:underline">Terms of Use</a></li>
-                        <li><a href="#" class="hover:underline">Cookie Settings</a></li>
+                        <li><a href="#" class="hover:text-primary-blue transition duration-300">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-primary-blue transition duration-300">Terms of Use</a></li>
+                        <li><a href="#" class="hover:text-primary-blue transition duration-300">Cookie Settings</a></li>
                     </ul>
                 </div>
             </div>
