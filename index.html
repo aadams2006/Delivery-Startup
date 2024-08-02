@@ -6,6 +6,8 @@
     <title>Hovr - Revolutionary Drone Delivery</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
 
@@ -113,12 +115,12 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
 
-        .features {
+        .features, .services, .testimonials {
             padding: 100px 0;
             background-color: #fff;
         }
 
-        .features h2 {
+        .features h2, .services h2, .testimonials h2 {
             text-align: center;
             font-size: 36px;
             margin-bottom: 60px;
@@ -213,17 +215,6 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .services {
-            padding: 100px 0;
-            background-color: #fff;
-        }
-
-        .services h2 {
-            text-align: center;
-            font-size: 36px;
-            margin-bottom: 60px;
-        }
-
         .service-tabs {
             display: flex;
             justify-content: center;
@@ -254,6 +245,21 @@
             display: block;
         }
 
+        .service-content h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .service-content ul {
+            margin-bottom: 20px;
+            padding-left: 20px;
+        }
+
+        .service-content .cta-button {
+            display: inline-block;
+            margin-top: 20px;
+        }
+
         .drone-simulator {
             padding: 100px 0;
             background-color: #f9f9f9;
@@ -274,21 +280,10 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .simulator-map {
+        #map {
             width: 100%;
             height: 400px;
-            background-color: #e0e0e0;
             margin-bottom: 20px;
-            position: relative;
-        }
-
-        .drone-icon {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background-color: var(--primary-color);
-            border-radius: 50%;
-            transition: all 0.5s ease;
         }
 
         .simulator-controls {
@@ -320,6 +315,77 @@
 
         .simulator-button:hover {
             background-color: var(--secondary-color);
+        }
+
+        .user-account {
+            padding: 100px 0;
+            background-color: #fff;
+        }
+
+        .user-account h2 {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 40px;
+        }
+
+        .account-container {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #f9f9f9;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .account-form input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .account-form button {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .account-form button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+
+        .testimonial-item {
+            background-color: #f9f9f9;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .testimonial-item img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
+
+        .testimonial-item h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .testimonial-item p {
+            font-style: italic;
         }
 
         footer {
@@ -375,7 +441,7 @@
                 font-size: 18px;
             }
 
-            .feature-grid {
+            .feature-grid, .testimonial-grid {
                 grid-template-columns: 1fr;
             }
 
@@ -417,6 +483,8 @@
                 <a href="#how-it-works">How It Works</a>
                 <a href="#services">Services</a>
                 <a href="#simulator">Simulator</a>
+                <a href="#account">Account</a>
+                <a href="#testimonials">Testimonials</a>
                 <a href="#contact">Contact</a>
             </div>
         </nav>
@@ -458,7 +526,7 @@
             <div class="container">
                 <h2>How It Works</h2>
                 <div class="timeline">
-                    <div class="timeline-item left">
+                <div class="timeline-item left">
                         <div class="content">
                             <h3>Place Order</h3>
                             <p>Choose your service type and request a drone for your delivery.</p>
@@ -496,17 +564,41 @@
                 </div>
                 <div class="service-content active" id="individual-service">
                     <h3>P2P Shipping for Individuals</h3>
-                    <p>Experience the convenience of peer-to-peer drone shipping. Request a drone, place your package, and watch as it's delivered directly to the recipient. Our drones will safely return to the nearest hub after delivery.</p>
+                    <p>Experience the convenience of peer-to-peer drone shipping. Our service allows you to send packages directly to other individuals quickly and efficiently.</p>
+                    <ul>
+                        <li>Fast delivery times, often within hours</li>
+                        <li>Eco-friendly transportation method</li>
+                        <li>Secure package handling with real-time tracking</li>
+                        <li>Flexible pickup and drop-off locations</li>
+                        <li>Affordable rates for various package sizes</li>
+                    </ul>
+                    <p>Perfect for sending gifts, documents, or small items to friends and family across town.</p>
                     <a href="#" class="cta-button">Get Started</a>
                 </div>
                 <div class="service-content" id="small-business-service">
                     <h3>Alternative Delivery System for Small Businesses</h3>
-                    <p>Enhance your business operations with our drone delivery service. Similar to popular food delivery apps, but versatile enough for any business type. Streamline your deliveries and delight your customers with fast, efficient drone deliveries.</p>
+                    <p>Enhance your business operations with our drone delivery service. Similar to popular food delivery apps, but versatile enough for any business type.</p>
+                    <ul>
+                        <li>Integrate with your existing e-commerce platform</li>
+                        <li>Reduce delivery costs and increase efficiency</li>
+                        <li>Expand your delivery radius</li>
+                        <li>Provide real-time tracking for your customers</li>
+                        <li>Customizable delivery options (express, scheduled, etc.)</li>
+                    </ul>
+                    <p>Ideal for local retailers, restaurants, pharmacies, and other small businesses looking to improve their delivery capabilities.</p>
                     <a href="#" class="cta-button">Partner with Us</a>
                 </div>
                 <div class="service-content" id="corporate-service">
                     <h3>Custom Corporate Partnerships</h3>
-                    <p>Tailor our drone delivery service to meet your corporation's specific needs. Whether you're looking to optimize your supply chain, improve last-mile delivery, or implement innovative logistics solutions, we've got you covered.</p>
+                    <p>Tailor our drone delivery service to meet your corporation's specific needs. We offer scalable solutions for large-scale operations.</p>
+                    <ul>
+                        <li>Dedicated fleet of drones for your company</li>
+                        <li>Custom API integration with your logistics systems</li>
+                        <li>Advanced analytics and reporting</li>
+                        <li>Multi-site support for complex supply chains</li>
+                        <li>24/7 priority support and maintenance</li>
+                    </ul>
+                    <p>Suitable for e-commerce giants, large retailers, healthcare networks, and other corporations with extensive delivery needs.</p>
                     <a href="#" class="cta-button">Request a Consultation</a>
                 </div>
             </div>
@@ -516,14 +608,52 @@
             <div class="container">
                 <h2>Drone Delivery Simulator</h2>
                 <div class="simulator-container">
-                    <div class="simulator-map">
-                        <div class="drone-icon" id="drone"></div>
-                    </div>
+                    <div id="map"></div>
                     <div class="simulator-controls">
                         <div class="simulator-input">
-                            <input type="text" id="destination" placeholder="Enter destination address">
+                            <input type="text" id="start" placeholder="Enter start address">
+                        </div>
+                        <div class="simulator-input">
+                            <input type="text" id="end" placeholder="Enter destination address">
                         </div>
                         <button class="simulator-button" id="start-simulation">Start Simulation</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="account" class="user-account">
+            <div class="container">
+                <h2>Your Hovr Account</h2>
+                <div class="account-container">
+                    <form class="account-form">
+                        <input type="email" placeholder="Email" required>
+                        <input type="password" placeholder="Password" required>
+                        <button type="submit">Log In</button>
+                    </form>
+                    <p>Don't have an account? <a href="#">Sign up</a></p>
+                </div>
+            </div>
+        </section>
+
+        <section id="testimonials" class="testimonials">
+            <div class="container">
+                <h2>What Our Customers Say</h2>
+                <div class="testimonial-grid">
+                    <div class="testimonial-item">
+                        <img src="/api/placeholder/80/80" alt="Sarah Johnson">
+                        <h3>Sarah Johnson</h3>
+                        <p>"I used Hovr to send a last-minute birthday gift to my friend across town. It arrived within an hour! Incredible service."</p>
+                    </div>
+                    <div class="testimonial-item">
+                        <img src="/api/placeholder/80/80" alt="Mike's Pizzeria">
+                        <h3>Mike's Pizzeria</h3>
+                        <p>"Hovr has revolutionized our delivery system. We can now reach customers faster and hotter than ever before!"</p>
+                    </div>
+                    <div class="testimonial-item">
+                        <img src="/api/placeholder/80/80" alt="TechCorp Inc.">
+                        <h3>TechCorp Inc.</h3>
+                        <p>"The custom corporate solution from Hovr has streamlined our supply chain. A game-changer for our business."</p>
                     </div>
                 </div>
             </div>
@@ -543,6 +673,8 @@
                     <li><a href="#how-it-works">How It Works</a></li>
                     <li><a href="#services">Services</a></li>
                     <li><a href="#simulator">Simulator</a></li>
+                    <li><a href="#account">Account</a></li>
+                    <li><a href="#testimonials">Testimonials</a></li>
                     <li><a href="#contact">Contact</a></li>
                 </ul>
             </div>
@@ -621,26 +753,54 @@
             });
         });
 
+        // Initialize map
+        const map = L.map('map').setView([51.505, -0.09], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
         // Drone simulator functionality
-        const drone = document.getElementById('drone');
         const startSimulation = document.getElementById('start-simulation');
-        const destinationInput = document.getElementById('destination');
+        const startInput = document.getElementById('start');
+        const endInput = document.getElementById('end');
 
         startSimulation.addEventListener('click', () => {
-            const destination = destinationInput.value;
-            if (destination) {
-                // Simulate drone movement (you can replace this with more complex animation)
-                gsap.to(drone, {
-                    left: Math.random() * 80 + '%',
-                    top: Math.random() * 80 + '%',
-                    duration: 2,
-                    ease: 'power2.inOut',
-                    onComplete: () => {
-                        alert(`Package delivered to ${destination}!`);
-                    }
+            const start = startInput.value;
+            const end = endInput.value;
+
+            if (start && end) {
+                // Simulate drone movement (you can replace this with actual geocoding and routing)
+                const startLatLng = [51.505, -0.09];
+                const endLatLng = [51.51, -0.1];
+
+                map.fitBounds([startLatLng, endLatLng]);
+
+                const droneIcon = L.icon({
+                    iconUrl: '/api/placeholder/32/32',
+                    iconSize: [32, 32],
+                    iconAnchor: [16, 16]
                 });
+
+                const drone = L.marker(startLatLng, {icon: droneIcon}).addTo(map);
+
+                const dronePath = L.polyline([startLatLng, endLatLng], {color: 'red'}).addTo(map);
+
+                let progress = 0;
+                const animateDrone = () => {
+                    if (progress <= 1) {
+                        const lat = startLatLng[0] + (endLatLng[0] - startLatLng[0]) * progress;
+                        const lng = startLatLng[1] + (endLatLng[1] - startLatLng[1]) * progress;
+                        drone.setLatLng([lat, lng]);
+                        progress += 0.01;
+                        requestAnimationFrame(animateDrone);
+                    } else {
+                        alert('Package delivered!');
+                    }
+                };
+
+                animateDrone();
             } else {
-                alert('Please enter a destination address.');
+                alert('Please enter both start and destination addresses.');
             }
         });
     </script>
