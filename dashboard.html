@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hovr Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <a class="brand" href="index.html">Hovr</a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="solutions.html">Solutions</a></li>
+                    <li><a href="technology.html">Technology</a></li>
+                    <li><a href="company.html">Company</a></li>
+                </ul>
+            </nav>
+            <div class="nav-actions">
+                <button id="logout" class="button button-ghost">Log out</button>
+            </div>
+        </div>
+    </header>
+    <main>
+        <section class="section" style="margin-bottom: 60px;">
+            <div class="dashboard-wrapper">
+                <aside class="dashboard-sidebar">
+                    <div>
+                        <span class="card-eyebrow">Welcome</span>
+                        <h2 class="card-title" id="user-name">Operator</h2>
+                        <p class="card-copy" id="user-company">Hovr Sandbox</p>
+                    </div>
+                    <div class="dashboard-nav">
+                        <button class="active" data-tab="overview">Overview</button>
+                        <button data-tab="missions">Missions</button>
+                        <button data-tab="schedule">Schedule</button>
+                        <button data-tab="settings">Settings</button>
+                    </div>
+                </aside>
+                <div class="dashboard-content" id="dashboard-content"></div>
+            </div>
+        </section>
+    </main>
+    <script src="dashboard.js"></script>
+</body>
+</html>

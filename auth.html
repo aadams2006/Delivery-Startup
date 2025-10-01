@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hovr Access — Sign In</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <a class="brand" href="index.html">Hovr</a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="solutions.html">Solutions</a></li>
+                    <li><a href="technology.html">Technology</a></li>
+                    <li><a href="company.html">Company</a></li>
+                </ul>
+            </nav>
+            <div class="nav-actions">
+                <a class="button button-ghost" href="auth.html">Sign In</a>
+                <a class="button button-primary" href="auth.html">Create Account</a>
+            </div>
+        </div>
+    </header>
+    <main>
+        <section class="section">
+            <div class="auth-container">
+                <div class="glass-panel">
+                    <div class="glass-panel-content">
+                        <span class="section-eyebrow">Mission Control Access</span>
+                        <h1 class="section-title" style="font-size: clamp(2.2rem, 4vw, 3.4rem);">Log in to orchestrate your network.</h1>
+                        <p class="section-description">Create an account to explore the Hovr dashboard, monitor flights, and schedule simulated deliveries. We’ll store everything securely in your browser.</p>
+                        <div class="card" style="background: rgba(8, 13, 36, 0.92);">
+                            <h3 class="card-title">Security matters</h3>
+                            <p class="card-copy">Multi-factor authentication and full audit trails are available in production environments. This sandbox stores credentials locally for demo purposes.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="auth-card">
+                    <div class="tabs">
+                        <button class="tab-button active" data-tab="login">Sign In</button>
+                        <button class="tab-button" data-tab="register">Create Account</button>
+                    </div>
+                    <form id="login-form" class="form-grid" autocomplete="off">
+                        <div class="form-group">
+                            <label for="login-email">Email</label>
+                            <input type="email" id="login-email" required placeholder="you@company.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="login-password">Password</label>
+                            <input type="password" id="login-password" required placeholder="••••••••">
+                        </div>
+                        <button type="submit" class="button button-primary">Access Dashboard</button>
+                    </form>
+                    <form id="register-form" class="form-grid" style="display: none;" autocomplete="off">
+                        <div class="form-grid two">
+                            <div class="form-group">
+                                <label for="register-name">Full name</label>
+                                <input type="text" id="register-name" required placeholder="Alex Taylor">
+                            </div>
+                            <div class="form-group">
+                                <label for="register-company">Company</label>
+                                <input type="text" id="register-company" placeholder="Optional">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-email">Email</label>
+                            <input type="email" id="register-email" required placeholder="you@company.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="register-password">Password</label>
+                            <input type="password" id="register-password" required placeholder="Create a password">
+                        </div>
+                        <button type="submit" class="button button-primary">Create Account</button>
+                    </form>
+                    <p class="notice" id="auth-feedback"></p>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script>
+        const tabs = document.querySelectorAll('.tab-button');
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const feedback = document.getElementById('auth-feedback');
+        const USERS_KEY = 'hovrUsers';
+        const SESSION_KEY = 'hovrSession';
+
+        const loadUsers = () => JSON.parse(localStorage.getItem(USERS_KEY) || '[]');
+        const saveUsers = (users) => localStorage.setItem(USERS_KEY, JSON.stringify(users));
+        const setSession = (session) => localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+
+        tabs.forEach((tab) => {
+            tab.addEventListener('click', () => {
+                tabs.forEach((btn) => btn.classList.remove('active'));
+                tab.classList.add('active');
+                if (tab.dataset.tab === 'login') {
+                    loginForm.style.display = 'grid';
+                    registerForm.style.display = 'none';
+                    feedback.textContent = '';
+                } else {
+                    loginForm.style.display = 'none';
+                    registerForm.style.display = 'grid';
+                    feedback.textContent = '';
+                }
+            });
+        });
+
+        loginForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const email = document.getElementById('login-email').value.trim().toLowerCase();
+            const password = document.getElementById('login-password').value;
+            const users = loadUsers();
+            const user = users.find((u) => u.email === email && u.password === password);
+
+            if (!user) {
+                feedback.textContent = 'We could not verify those credentials. Try again or create an account.';
+                return;
+            }
+
+            setSession({ email: user.email, name: user.name || user.email.split('@')[0], company: user.company || '' });
+            window.location.href = 'dashboard.html';
+        });
+
+        registerForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const name = document.getElementById('register-name').value.trim();
+            const company = document.getElementById('register-company').value.trim();
+            const email = document.getElementById('register-email').value.trim().toLowerCase();
+            const password = document.getElementById('register-password').value;
+
+            if (password.length < 8) {
+                feedback.textContent = 'Please choose a password with at least 8 characters.';
+                return;
+            }
+
+            const users = loadUsers();
+            if (users.some((u) => u.email === email)) {
+                feedback.textContent = 'An account with that email already exists. Try signing in.';
+                return;
+            }
+
+            users.push({ name, company, email, password });
+            saveUsers(users);
+            setSession({ email, name: name || email.split('@')[0], company });
+            feedback.textContent = 'Account created. Redirecting to your dashboard...';
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 600);
+        });
+    </script>
+</body>
+</html>

@@ -1,278 +1,254 @@
-import React, { useState } from 'react';
-import { Bell, Package, Truck, Building, Calendar, ChevronRight, Settings, LogOut, X, MapPin, Clock, DollarSign } from 'lucide-react';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+const SESSION_KEY = 'hovrSession';
 
-const UserDashboard = () => {
-  const [activeTab, setActiveTab] = useState('overview');
-  const [showModal, setShowModal] = useState(false);
-  const [selectedShipment, setSelectedShipment] = useState(null);
-  const [showNotification, setShowNotification] = useState(false);
-
-  const tabs = [
-    { id: 'overview', label: 'Overview', icon: Package },
-    { id: 'shipments', label: 'Shipments', icon: Truck },
-    { id: 'schedule', label: 'Schedule', icon: Calendar },
-    { id: 'settings', label: 'Settings', icon: Settings },
-  ];
-
-  const recentShipments = [
-    { id: 1, type: 'P2P', status: 'In Transit', destination: '123 Main St, Anytown, USA', eta: '2 hours', cost: '$15.99' },
-    { id: 2, type: 'Business', status: 'Delivered', destination: '456 Elm St, Otherville, USA', eta: 'Delivered', cost: '$24.99' },
-    { id: 3, type: 'Corporate', status: 'Scheduled', destination: '789 Oak Ave, Bigcity, USA', eta: '1 day', cost: '$99.99' },
-  ];
-
-  const openShipmentModal = (shipment) => {
-    setSelectedShipment(shipment);
-    setShowModal(true);
-  };
-
-  const closeShipmentModal = () => {
-    setSelectedShipment(null);
-    setShowModal(false);
-  };
-
-  const toggleNotification = () => {
-    setShowNotification(!showNotification);
-  };
-
-  const renderTabContent = () => {
-    switch (activeTab) {
-      case 'overview':
-        return (
-          <div>
-            <h3 className="text-lg font-semibold text-gray-700 mb-4">Welcome back, John!</h3>
-            <p className="text-gray-600 mb-4">Here's a quick overview of your Hovr activity:</p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-              <div className="bg-white p-4 rounded-lg shadow-sm">
-                <h4 className="font-medium text-gray-700 mb-2">Total Shipments</h4>
-                <p className="text-2xl font-bold text-blue-600">24</p>
-              </div>
-              <div className="bg-white p-4 rounded-lg shadow-sm">
-                <h4 className="font-medium text-gray-700 mb-2">Active Shipments</h4>
-                <p className="text-2xl font-bold text-green-600">3</p>
-              </div>
-              <div className="bg-white p-4 rounded-lg shadow-sm">
-                <h4 className="font-medium text-gray-700 mb-2">Total Savings</h4>
-                <p className="text-2xl font-bold text-purple-600">$127.50</p>
-              </div>
-            </div>
-            {/* Quick Actions and Recent Shipments sections remain here */}
-          </div>
-        );
-      case 'shipments':
-        return (
-          <div>
-            <h3 className="text-lg font-semibold text-gray-700 mb-4">All Shipments</h3>
-            <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-              <table className="w-full">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Destination</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ETA</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cost</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200">
-                  {recentShipments.map((shipment) => (
-                    <tr key={shipment.id}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#{shipment.id}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{shipment.type}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{shipment.status}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{shipment.destination}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{shipment.eta}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{shipment.cost}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button
-                          className="text-blue-600 hover:text-blue-900"
-                          onClick={() => openShipmentModal(shipment)}
-                        >
-                          Details <ChevronRight className="inline-block w-4 h-4" />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        );
-      case 'schedule':
-        return (
-          <div>
-            <h3 className="text-lg font-semibold text-gray-700 mb-4">Upcoming Shipments</h3>
-            <div className="bg-white p-4 rounded-lg shadow-sm">
-              <ul className="divide-y divide-gray-200">
-                <li className="py-4">
-                  <div className="flex items-center">
-                    <Calendar className="w-6 h-6 text-blue-600 mr-3" />
-                    <div>
-                      <p className="text-sm font-medium text-gray-900">P2P Shipment to 123 Pine St</p>
-                      <p className="text-sm text-gray-500">Tomorrow, 2:00 PM</p>
-                    </div>
-                  </div>
-                </li>
-                <li className="py-4">
-                  <div className="flex items-center">
-                    <Calendar className="w-6 h-6 text-green-600 mr-3" />
-                    <div>
-                      <p className="text-sm font-medium text-gray-900">Business Delivery to 456 Oak Ave</p>
-                      <p className="text-sm text-gray-500">Aug 5, 10:00 AM</p>
-                    </div>
-                  </div>
-                </li>
-                <li className="py-4">
-                  <div className="flex items-center">
-                    <Calendar className="w-6 h-6 text-purple-600 mr-3" />
-                    <div>
-                      <p className="text-sm font-medium text-gray-900">Corporate Shipment to 789 Maple Rd</p>
-                      <p className="text-sm text-gray-500">Aug 7, 9:00 AM</p>
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </div>
-        );
-      case 'settings':
-        return (
-          <div>
-            <h3 className="text-lg font-semibold text-gray-700 mb-4">Account Settings</h3>
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <form>
-                <div className="mb-4">
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">Name</label>
-                  <input type="text" id="name" name="name" className="w-full px-3 py-2 border border-gray-300 rounded-md" defaultValue="John Doe" />
-                </div>
-                <div className="mb-4">
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                  <input type="email" id="email" name="email" className="w-full px-3 py-2 border border-gray-300 rounded-md" defaultValue="john.doe@example.com" />
-                </div>
-                <div className="mb-4">
-                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
-                  <input type="tel" id="phone" name="phone" className="w-full px-3 py-2 border border-gray-300 rounded-md" defaultValue="(123) 456-7890" />
-                </div>
-                <div className="mt-6">
-                  <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Save Changes</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        );
-      default:
-        return null;
-    }
-  };
-
-  return (
-    <div className="flex h-screen bg-gray-100">
-      {/* Sidebar */}
-      <aside className="w-64 bg-white shadow-md">
-        <div className="p-4">
-          <h1 className="text-2xl font-bold text-blue-600">Hovr</h1>
-        </div>
-        <nav className="mt-8">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              className={`flex items-center w-full px-4 py-2 text-left ${
-                activeTab === tab.id ? 'bg-blue-100 text-blue-600' : 'text-gray-600 hover:bg-gray-100'
-              }`}
-              onClick={() => setActiveTab(tab.id)}
-            >
-              <tab.icon className="w-5 h-5 mr-3" />
-              {tab.label}
-            </button>
-          ))}
-        </nav>
-        <div className="absolute bottom-0 w-64 p-4">
-          <button className="flex items-center text-gray-600 hover:text-red-600">
-            <LogOut className="w-5 h-5 mr-3" />
-            Logout
-          </button>
-        </div>
-      </aside>
-
-      {/* Main Content */}
-      <main className="flex-1 overflow-y-auto">
-        <header className="bg-white shadow-sm">
-          <div className="flex items-center justify-between px-8 py-4">
-            <h2 className="text-2xl font-semibold text-gray-800">Dashboard</h2>
-            <div className="flex items-center space-x-4">
-              <button className="text-gray-600 hover:text-blue-600" onClick={toggleNotification}>
-                <Bell className="w-6 h-6" />
-              </button>
-              <div className="flex items-center space-x-2">
-                <img
-                  src="/api/placeholder/32/32"
-                  alt="User avatar"
-                  className="w-8 h-8 rounded-full"
-                />
-                <span className="text-sm font-medium text-gray-700">John Doe</span>
-              </div>
-            </div>
-          </div>
-        </header>
-
-        <div className="p-8">
-          {renderTabContent()}
-        </div>
-      </main>
-
-      {/* Shipment Details Modal */}
-      {showModal && selectedShipment && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-8 rounded-lg max-w-md w-full">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Shipment Details</h3>
-              <button onClick={closeShipmentModal} className="text-gray-400 hover:text-gray-500">
-                <X className="w-6 h-6" />
-              </button>
-            </div>
-            <div className="space-y-4">
-              <p><span className="font-medium">ID:</span> #{selectedShipment.id}</p>
-              <p><span className="font-medium">Type:</span> {selectedShipment.type}</p>
-              <p><span className="font-medium">Status:</span> {selectedShipment.status}</p>
-              <p className="flex items-center">
-                <MapPin className="w-5 h-5 mr-2 text-gray-500" />
-                <span>{selectedShipment.destination}</span>
-              </p>
-              <p className="flex items-center">
-                <Clock className="w-5 h-5 mr-2 text-gray-500" />
-                <span>ETA: {selectedShipment.eta}</span>
-              </p>
-              <p className="flex items-center">
-                <DollarSign className="w-5 h-5 mr-2 text-gray-500" />
-                <span>Cost: {selectedShipment.cost}</span>
-              </p>
-            </div>
-            <button
-              className="mt-6 w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700"
-              onClick={closeShipmentModal}
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Notification */}
-      {showNotification && (
-        <div className="fixed top-20 right-8 w-80">
-          <Alert>
-            <Bell className="h-4 w-4" />
-            <AlertTitle>New Notification</AlertTitle>
-            <AlertDescription>
-              Your shipment #1234 has been delivered successfully.
-            </AlertDescription>
-          </Alert>
-        </div>
-      )}
-    </div>
-  );
+const state = {
+  activeTab: 'overview',
+  shipments: [
+    { id: 'HX-4821', type: 'Retail Pulse', status: 'in-transit', destination: '245 Market St, SF', eta: '7 min', cost: '$18.20' },
+    { id: 'HX-4756', type: 'Healthcare Express', status: 'delivered', destination: 'UCSF Mission Bay', eta: 'Delivered', cost: '$0 (critical)' },
+    { id: 'HX-4739', type: 'Enterprise Grid', status: 'scheduled', destination: 'Oakland Logistics Hub', eta: 'Launch 16:40', cost: '$112.00' }
+  ],
+  schedule: [
+    { id: 'HX-4835', time: 'Today • 19:15', description: 'P2P Mesh — SoMa → Sunset', duration: '12 min' },
+    { id: 'HX-4840', time: 'Tomorrow • 08:05', description: 'Retail Pulse — Financial District → Marina', duration: '9 min' },
+    { id: 'HX-4848', time: 'Tomorrow • 10:30', description: 'Healthcare Express — Mission Bay → Stanford', duration: '21 min' }
+  ]
 };
 
-export default UserDashboard;
+const session = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null');
+if (!session) {
+  window.location.href = 'auth.html';
+}
+
+const userName = document.getElementById('user-name');
+const userCompany = document.getElementById('user-company');
+const dashboardContent = document.getElementById('dashboard-content');
+const navButtons = document.querySelectorAll('.dashboard-nav button');
+const logoutButton = document.getElementById('logout');
+
+if (session) {
+  userName.textContent = session.name || 'Operator';
+  userCompany.textContent = session.company || session.email;
+}
+
+const templates = {
+  overview: () => `
+    <div class="card-grid">
+      <div class="card">
+        <span class="card-eyebrow">Flights today</span>
+        <h3 class="card-title" style="font-size:2.4rem;">32</h3>
+        <p class="card-copy">Active sorties underway across the Hovr mesh.</p>
+      </div>
+      <div class="card">
+        <span class="card-eyebrow">On-time rate</span>
+        <h3 class="card-title" style="font-size:2.4rem;">99.1%</h3>
+        <p class="card-copy">Network latency running 0.9% faster than SLA.</p>
+      </div>
+      <div class="card">
+        <span class="card-eyebrow">Energy reserve</span>
+        <h3 class="card-title" style="font-size:2.4rem;">82%</h3>
+        <p class="card-copy">Fleet batteries ready for the next wave of demand.</p>
+      </div>
+    </div>
+    <div class="glass-panel">
+      <div class="glass-panel-content">
+        <span class="card-eyebrow">Live Missions</span>
+        <h3 class="card-title">Monitor progress in real time</h3>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Flight</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Destination</th>
+              <th>ETA</th>
+              <th>Cost</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${state.shipments.map((shipment) => `
+              <tr>
+                <td>${shipment.id}</td>
+                <td>${shipment.type}</td>
+                <td><span class="status ${shipment.status}">${formatStatus(shipment.status)}</span></td>
+                <td>${shipment.destination}</td>
+                <td>${shipment.eta}</td>
+                <td>${shipment.cost}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `,
+  missions: () => `
+    <div class="glass-panel">
+      <div class="glass-panel-content">
+        <span class="card-eyebrow">Mission Log</span>
+        <h3 class="card-title">Detailed flight history</h3>
+        <p class="card-copy">Export this data for compliance or operations analysis. Mission data is stored for 18 months by default.</p>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Flight</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Destination</th>
+              <th>ETA</th>
+              <th>Cost</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${state.shipments.concat([{
+              id: 'HX-4701', type: 'Retail Pulse', status: 'delivered', destination: 'Union Square', eta: 'Delivered', cost: '$14.40'
+            }]).map((shipment) => `
+              <tr>
+                <td>${shipment.id}</td>
+                <td>${shipment.type}</td>
+                <td><span class="status ${shipment.status}">${formatStatus(shipment.status)}</span></td>
+                <td>${shipment.destination}</td>
+                <td>${shipment.eta}</td>
+                <td>${shipment.cost}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+        <button class="button button-primary" style="margin-top: 16px; align-self:flex-start;">Download CSV</button>
+      </div>
+    </div>
+  `,
+  schedule: () => `
+    <div class="glass-panel">
+      <div class="glass-panel-content">
+        <span class="card-eyebrow">Launch plan</span>
+        <h3 class="card-title">Upcoming sorties</h3>
+        <div class="timeline">
+          ${state.schedule.map((item) => `
+            <div class="timeline-item">
+              <span class="timeline-marker">${item.id.split('-')[1]}</span>
+              <div>
+                <h4 class="card-title">${item.description}</h4>
+                <p class="card-copy">${item.time} • Duration ${item.duration}</p>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+        <form class="form-grid" style="margin-top:24px;">
+          <div class="form-grid two">
+            <div class="form-group">
+              <label for="new-flight-id">Flight ID</label>
+              <input id="new-flight-id" type="text" placeholder="HX-4850" required>
+            </div>
+            <div class="form-group">
+              <label for="new-flight-time">Launch time</label>
+              <input id="new-flight-time" type="datetime-local" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="new-flight-desc">Description</label>
+            <input id="new-flight-desc" type="text" placeholder="Route description" required>
+          </div>
+          <button class="button button-primary" type="submit">Add to schedule</button>
+        </form>
+      </div>
+    </div>
+  `,
+  settings: () => `
+    <div class="glass-panel">
+      <div class="glass-panel-content">
+        <span class="card-eyebrow">Profile</span>
+        <h3 class="card-title">Account preferences</h3>
+        <form class="form-grid">
+          <div class="form-grid two">
+            <div class="form-group">
+              <label for="settings-name">Operator name</label>
+              <input id="settings-name" type="text" value="${session?.name || ''}" required>
+            </div>
+            <div class="form-group">
+              <label for="settings-company">Organization</label>
+              <input id="settings-company" type="text" value="${session?.company || ''}">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="settings-email">Email</label>
+            <input id="settings-email" type="email" value="${session?.email || ''}" disabled>
+          </div>
+          <button class="button button-primary" type="submit">Save preferences</button>
+        </form>
+        <p class="notice">Need to upgrade to production? Contact your Hovr success manager for enterprise provisioning.</p>
+      </div>
+    </div>
+  `
+};
+
+function formatStatus(status) {
+  switch (status) {
+    case 'in-transit':
+      return 'In Transit';
+    case 'delivered':
+      return 'Delivered';
+    case 'scheduled':
+      return 'Scheduled';
+    default:
+      return status;
+  }
+}
+
+function render() {
+  dashboardContent.innerHTML = templates[state.activeTab]();
+
+  if (state.activeTab === 'schedule') {
+    const form = dashboardContent.querySelector('form');
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const idInput = form.querySelector('#new-flight-id');
+      const timeInput = form.querySelector('#new-flight-time');
+      const descInput = form.querySelector('#new-flight-desc');
+
+      state.schedule.unshift({
+        id: idInput.value || `HX-${Math.floor(Math.random() * 5000) + 4000}`,
+        time: new Date(timeInput.value).toLocaleString(),
+        description: descInput.value,
+        duration: 'Pending'
+      });
+
+      idInput.value = '';
+      timeInput.value = '';
+      descInput.value = '';
+      render();
+    });
+  }
+
+  if (state.activeTab === 'settings') {
+    const form = dashboardContent.querySelector('form');
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const nameValue = form.querySelector('#settings-name').value.trim();
+      const companyValue = form.querySelector('#settings-company').value.trim();
+      const updatedSession = { ...session, name: nameValue, company: companyValue };
+      localStorage.setItem(SESSION_KEY, JSON.stringify(updatedSession));
+      userName.textContent = nameValue || 'Operator';
+      userCompany.textContent = companyValue || session.email;
+
+      const notice = document.createElement('p');
+      notice.className = 'notice';
+      notice.textContent = 'Preferences saved locally for this demo experience.';
+      form.after(notice);
+    });
+  }
+}
+
+navButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    navButtons.forEach((btn) => btn.classList.remove('active'));
+    button.classList.add('active');
+    state.activeTab = button.dataset.tab;
+    render();
+  });
+});
+
+logoutButton.addEventListener('click', () => {
+  localStorage.removeItem(SESSION_KEY);
+  window.location.href = 'auth.html';
+});
+
+render();
